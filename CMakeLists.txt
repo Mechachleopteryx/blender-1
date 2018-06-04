@@ -205,7 +205,7 @@ option(WITH_PYTHON_SAFETY "Enable internal API error checking to track invalid d
 mark_as_advanced(WITH_PYTHON_SAFETY)
 option(WITH_PYTHON_MODULE "Enable building as a python module which runs without a user interface, like running regular blender in background mode (experimental, only enable for development), installs to PYTHON_SITE_PACKAGES (or CMAKE_INSTALL_PREFIX if WITH_INSTALL_PORTABLE is enabled)." OFF)
 if(APPLE)
-	option(WITH_PYTHON_FRAMEWORK "Enable building using the Python available in the framework (OSX only)" OFF)
+	option(WITH_PYTHON_FRAMEWORK "Enable building using the Python available in the framework (OSX only)" ON)
 endif()
 
 option(WITH_BUILDINFO     "Include extra build details (only disable for development & faster builds)" ${_init_BUILDINFO})
@@ -378,9 +378,9 @@ if(UNIX AND NOT APPLE)
 	endif()
 endif()
 
-option(WITH_PYTHON_INSTALL       "Copy system python into the blender install folder" ON)
+option(WITH_PYTHON_INSTALL       "Copy system python into the blender install folder" OFF)
 if(WITH_PYTHON_INSTALL)
-	option(WITH_PYTHON_INSTALL_NUMPY "Copy system numpy into the blender install folder"  ON)
+	option(WITH_PYTHON_INSTALL_NUMPY "Copy system numpy into the blender install folder"  OFF)
 	set(PYTHON_NUMPY_PATH            "" CACHE PATH "Path to python site-packages or dist-packages containing 'numpy' module")
 	mark_as_advanced(PYTHON_NUMPY_PATH)
 
@@ -856,13 +856,13 @@ set(CC_REMOVE_STRICT_FLAGS)
 
 # libraries to link the binary with passed to target_link_libraries()
 # known as LLIBS to scons
-set(PLATFORM_LINKLIBS "")
+set(PLATFORM_LINKLIBS "-L/usr/local/Frameworks/Python.framework/Versions/3.6/lib")
 
 # Added to linker flags in setup_liblinks
 # - CMAKE_EXE_LINKER_FLAGS
 # - CMAKE_EXE_LINKER_FLAGS_DEBUG
-set(PLATFORM_LINKFLAGS "")
-set(PLATFORM_LINKFLAGS_DEBUG "")
+set(PLATFORM_LINKFLAGS "-L/usr/local/Frameworks/Python.framework/Versions/3.6/lib")
+set(PLATFORM_LINKFLAGS_DEBUG "-L/usr/local/Frameworks/Python.framework/Versions/3.6/lib")
 
 if(WITH_COMPILER_ASAN)
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${COMPILER_ASAN_CFLAGS}")

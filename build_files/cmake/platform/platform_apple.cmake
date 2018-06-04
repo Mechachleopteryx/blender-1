@@ -97,7 +97,7 @@ if(WITH_PYTHON)
 		# set(PYTHON_LINKFLAGS "-u _PyMac_Error")  # won't  build with this enabled
 	else()
 		# module must be compiled against Python framework
-		set(_py_framework "/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}")
+		set(_py_framework "/usr/local/Frameworks/Python.framework/Versions/${PYTHON_VERSION}")
 
 		set(PYTHON_INCLUDE_DIR "${_py_framework}/include/python${PYTHON_VERSION}m")
 		set(PYTHON_EXECUTABLE "${_py_framework}/bin/python${PYTHON_VERSION}m")
@@ -195,7 +195,7 @@ endif()
 
 if(WITH_PYTHON_MODULE OR WITH_PYTHON_FRAMEWORK)
 	# force cmake to link right framework
-	set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Python")
+	set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} /usr/local/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Python")
 endif()
 
 if(WITH_OPENCOLLADA)

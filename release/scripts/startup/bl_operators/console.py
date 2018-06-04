@@ -117,9 +117,9 @@ class ConsoleBanner(Operator):
     def execute(self, context):
         sc = context.space_data
 
-        # default to python
+        # default to julia
         if not sc.language:
-            sc.language = "python"
+            sc.language = "julia"
 
         module = _lang_module_get(sc)
         banner = getattr(module, "banner", None)
