@@ -20,7 +20,6 @@
 import sys
 import bpy
 import ctypes
-
 from ctypes import c_void_p as void_p
 
 language_id = "julia"
@@ -39,12 +38,6 @@ class JuliaException(Exception):
         self.exception = exception
 
 class JuliaConsole(julia.core.Julia):
-    def repr(self, x):
-        if x == None:
-            return ""
-        else:
-            return x
-
     def check_exception(self, src=None):
         exoc = self.api.jl_exception_occurred()
         if not exoc:
@@ -131,8 +124,8 @@ def get_console(console_id):
         namespace["bpy"] = bpy
 
         # weak! - but highly convenient
-        namespace["C"] = bpy.context
-        namespace["D"] = bpy.data
+        #namespace["C"] = bpy.context
+        #namespace["D"] = bpy.data
 
         replace_help(namespace)
 
@@ -213,10 +206,13 @@ def execute(context, is_interactive):
 
         try:
             ans = j.eval(inputline)
-            answer = j.repr(ans)
-            print(answer)
-            if 'nothing' == answer:
+            if ans is None:
                 is_nothing = True
+            else:
+                if type(ans) == str:
+                    print('"%s"' % ans)
+                else:
+                    print(ans)
         except JuliaException as err:
             is_error = True
             if 'ErrorException' == err.exception_type:
