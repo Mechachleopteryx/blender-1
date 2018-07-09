@@ -37,21 +37,6 @@ class JuliaException(Exception):
         self.exception_type = exception_type
         self.exception = exception
 
-class JuliaConsole(julia.core.Julia):
-    def check_exception(self, src=None):
-        exoc = self.api.jl_exception_occurred()
-        if not exoc:
-            self.api.jl_exception_clear()
-            return
-        res = self.api.jl_call2(void_p(self.api.convert), void_p(self.api.PyObject), exoc)
-        boxed_obj = self.api.jl_get_field(void_p(res), b'o')
-        pyobj = self.api.jl_unbox_voidpointer(void_p(boxed_obj))
-        ctypes.pythonapi.Py_IncRef(ctypes.py_object(pyobj))
-
-        exception_type = self.api.jl_typeof_str(exoc).decode('utf-8')
-        raise JuliaException(u'Exception \'{}\' occurred while calling julia code:\n{}'
-                         .format(exception_type, src), exception_type, pyobj)
-
 
 def add_scrollback(text, text_type):
     for l in text.split("\n"):
@@ -152,20 +137,15 @@ PROMPT         = 'julia> '
 PROMPT_MULTI   = '       '
 multiple_lines = []
 
-j = JuliaConsole()
+j = julia.Julia()
 
-j.eval("""
+code = """
 using BlenderPlot
 C = bpy.context
 D = bpy.data
-""")
-
-print("""
-using BlenderPlot
-C = bpy.context
-D = bpy.data
-""")
-
+"""
+j.eval(code)
+print(code)
 
 def execute(context, is_interactive):
     sc = context.space_data
